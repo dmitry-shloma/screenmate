@@ -1,0 +1,12 @@
+# directories
+Bin/
+Build/
+#
+
+# project settings
+Src/*.pro.user
+#
+
+# other files
+.directory
+#
