@@ -15,8 +15,11 @@ ScreenmateWidget::ScreenmateWidget(QWidget *parent) :
 
     setWindowFlags(Qt::Tool | Qt::FramelessWindowHint | Qt::WindowStaysOnTopHint);
 
-    QString fileName_ = QApplication::applicationFilePath() + ".conf";
-    initSettings(fileName_);
+    QString fileName = QString("%1%2%3.conf")
+            .arg(QApplication::applicationDirPath())
+            .arg(QDir::separator())
+            .arg(QApplication::applicationName());
+    initSettings(fileName);
 
     // TODO: реализовать чтение из conf файла имени персонажа (если встроенный)
     // или пути к его спрайтам (если внешний)
