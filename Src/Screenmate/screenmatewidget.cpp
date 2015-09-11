@@ -170,8 +170,9 @@ void ScreenmateWidget::constructTrajectory(ConstructionMode mode)
 
 void ScreenmateWidget::saveTrajectory(const QPoint &pos)
 {
-    static QString fileName = QApplication::applicationDirPath() + QDir::separator()
-            + "savedTrajectory.log";
+    static QString fileName = QString("%1%2savedTrajectory.log")
+            .arg(QApplication::applicationDirPath())
+            .arg(QDir::separator());
 
     QFile file(fileName);
     if (!file.open(QIODevice::WriteOnly | QIODevice::Text | QIODevice::Append)) {
@@ -186,7 +187,8 @@ void ScreenmateWidget::saveTrajectory(const QPoint &pos)
 
 int ScreenmateWidget::qrand(int low, int high)
 {
-    return low + ::qrand() % ((high + 1) - low);
+    int value = low + ::qrand() % ((high + 1) - low);
+    return value;
 }
 
 void ScreenmateWidget::initSprites(Character character)
