@@ -1,5 +1,5 @@
 ﻿# Screenmate
-An example of the development of screenmate using Qt
+An example of the development of cross-platform screenmate using Qt
 
 # Скринмейт
-Пример разработки скринмейта с использованием Qt 
+Пример разработки кроссплатформенного скринмейта с использованием Qt
