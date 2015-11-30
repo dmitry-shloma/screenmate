@@ -27,7 +27,12 @@ ScreenmateWidget::ScreenmateWidget(QWidget *parent) :
     // Рассмотреть возможность использования QMetaEnum для сравнения считанного значения
     // с существующим enum
 
-    initSprites();
+    QString str = settings_->value("Sprite/character").toString();
+    if (QString::compare(str, "Bat", Qt::CaseInsensitive) != 0) {
+        initSprites(Character::External);
+    } else {
+        initSprites();
+    }
 
     // TODO: реализовать чтение из conf файла режима конструктирования траектории
     // trajectoryConstructMode=Predefined
@@ -73,6 +78,8 @@ void ScreenmateWidget::paintEvent(QPaintEvent* event)
 
 void ScreenmateWidget::mousePressEvent(QMouseEvent *event)
 {
+    setFocus();
+
     if (!isTraining_) {
         return;
     }
@@ -207,7 +214,7 @@ void ScreenmateWidget::initSprites(Character character)
         break;
 
     case External:
-        pixmap = QPixmap(settings_->value("Sprite/character").toString());
+        pixmap = QPixmap(settings_->value("Sprite/character").toString() + ".png");
         spriteCount = settings_->value("Sprite/count").toInt();
         spriteWidth = pixmap.width() / spriteCount;
         spriteHeigth = pixmap.height();

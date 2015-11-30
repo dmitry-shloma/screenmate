@@ -6,6 +6,7 @@
 #include <QList>
 #include <QPoint>
 #include <QMouseEvent>
+#include <QKeyEvent>
 #include <QPair>
 #include <QPixmap>
 #include <QBitmap>
