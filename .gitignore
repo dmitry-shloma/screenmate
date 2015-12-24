@@ -1,12 +1,8 @@
-# directories
-Bin/
-Build/
-#
+# dirs
+[Bb]uild*
 
-# project settings
-Src/*.pro.user
-#
+# settings
+[Ss]rc/*.pro.user
 
-# other files
+# other
 .directory
-#
