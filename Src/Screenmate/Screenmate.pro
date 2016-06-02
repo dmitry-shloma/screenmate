@@ -3,7 +3,7 @@ PROJECT_DIR = $${PWD}/../
 
 BUILD_ESSENTIAL_DIR = $${PROJECT_DIR}/BuildEssential
 include($${BUILD_ESSENTIAL_DIR}/environment.pri)
-include($${BUILD_ESSENTIAL_DIR}/fileoperationhelper.pri)
+include($${BUILD_ESSENTIAL_DIR}/deploy.pri)
 #
 
 QT += core gui
@@ -27,6 +27,4 @@ RESOURCES += \
 OTHER_FILES += \
     Screenmate.conf
 
-srcFile = $${PWD}/Screenmate.conf
-dstFile = $${DESTDIR}/Screenmate.conf
-copyFile($${srcFile}, $${dstFile})
+copyFiles($${PWD}, $${DESTDIR}, Screenmate.conf)
