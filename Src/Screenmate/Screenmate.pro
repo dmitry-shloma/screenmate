@@ -1,9 +1,9 @@
 #
 PROJECT_DIR = $${PWD}/../
-LIB_DIR = $${OUT_PWD}/../Bin
 
 BUILD_ESSENTIAL_DIR = $${PROJECT_DIR}/BuildEssential
 include($${BUILD_ESSENTIAL_DIR}/environment.pri)
+include($${BUILD_ESSENTIAL_DIR}/fileoperationhelper.pri)
 #
 
 QT += core gui
@@ -23,3 +23,10 @@ FORMS += \
 
 RESOURCES += \
     resource.qrc
+
+OTHER_FILES += \
+    Screenmate.conf
+
+srcFile = $${PWD}/Screenmate.conf
+dstFile = $${DESTDIR}/Screenmate.conf
+copyFile($${srcFile}, $${dstFile})

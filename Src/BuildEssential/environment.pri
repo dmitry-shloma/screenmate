@@ -10,7 +10,7 @@ CONFIG(release, debug|release) {
     BUILD_DIR = $${OUT_PWD}/Release
 }
 
-DESTDIR = $${OUT_PWD}/../Bin
+DESTDIR = $${BUILD_DIR}/Bin
 
 MOC_DIR = $${BUILD_DIR}/Moc
 OBJECTS_DIR = $${BUILD_DIR}/Obj
