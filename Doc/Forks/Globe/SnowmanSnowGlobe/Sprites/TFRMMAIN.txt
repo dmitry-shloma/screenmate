@@ -1,0 +1,417 @@
+object frmMain: TfrmMain
+  Left = 352
+  Top = 252
+  BorderStyle = bsNone
+  Caption = 'frmMain'
+  ClientHeight = 524
+  ClientWidth = 893
+  Color = clBtnFace
+  Font.Charset = DEFAULT_CHARSET
+  Font.Color = clWindowText
+  Font.Height = -11
+  Font.Name = 'MS Sans Serif'
+  Font.Style = []
+  KeyPreview = True
+  OldCreateOrder = False
+  PopupMenu = PopupMenu
+  OnCloseQuery = FormCloseQuery
+  OnCreate = FormCreate
+  OnDestroy = FormDestroy
+  OnMouseDown = FormMouseDown
+  OnShow = FormShow
+  PixelsPerInch = 96
+  TextHeight = 13
+  object Snow1: TImage
+    Left = 272
+    Top = 480
+    Width = 7
+    Height = 7
+    AutoSize = True
+    Picture.Data = {
+      SaveType = 4
+      File = 'TfrmMain_Snow1_Picture_Data.raw'
+    }
+    Transparent = True
+  end
+  object imgBack: TImage
+    Left = 336
+    Top = 0
+    Width = 300
+    Height = 260
+    AutoSize = True
+    Picture.Data = {
+      SaveType = 4
+      File = 'TfrmMain_imgBack_Picture_Data.raw'
+    }
+    Transparent = True
+  end
+  object imgMiddle: TImage
+    Left = 640
+    Top = 8
+    Width = 300
+    Height = 260
+    AutoSize = True
+    Picture.Data = {
+      SaveType = 4
+      File = 'TfrmMain_imgMiddle_Picture_Data.raw'
+    }
+    Transparent = True
+  end
+  object imgFront: TImage
+    Left = 648
+    Top = 288
+    Width = 300
+    Height = 260
+    AutoSize = True
+    Picture.Data = {
+      SaveType = 4
+      File = 'TfrmMain_imgFront_Picture_Data.raw'
+    }
+    Transparent = True
+  end
+  object Snow2: TImage
+    Left = 280
+    Top = 480
+    Width = 7
+    Height = 7
+    AutoSize = True
+    Picture.Data = {
+      SaveType = 4
+      File = 'TfrmMain_Snow2_Picture_Data.raw'
+    }
+    Transparent = True
+  end
+  object Snow3: TImage
+    Left = 272
+    Top = 448
+    Width = 9
+    Height = 9
+    AutoSize = True
+    Picture.Data = {
+      SaveType = 4
+      File = 'TfrmMain_Snow3_Picture_Data.raw'
+    }
+    Transparent = True
+  end
+  object Snow4: TImage
+    Left = 288
+    Top = 448
+    Width = 9
+    Height = 9
+    AutoSize = True
+    Picture.Data = {
+      SaveType = 4
+      File = 'TfrmMain_Snow4_Picture_Data.raw'
+    }
+    Transparent = True
+  end
+  object Snow5: TImage
+    Left = 272
+    Top = 464
+    Width = 11
+    Height = 11
+    AutoSize = True
+    Picture.Data = {
+      SaveType = 4
+      File = 'TfrmMain_Snow5_Picture_Data.raw'
+    }
+    Transparent = True
+  end
+  object Snow6: TImage
+    Left = 288
+    Top = 464
+    Width = 13
+    Height = 13
+    AutoSize = True
+    Picture.Data = {
+      SaveType = 4
+      File = 'TfrmMain_Snow6_Picture_Data.raw'
+    }
+    Transparent = True
+  end
+  object imgCover: TImage
+    Left = 353
+    Top = 264
+    Width = 300
+    Height = 260
+    AutoSize = True
+    Picture.Data = {
+      SaveType = 4
+      File = 'TfrmMain_imgCover_Picture_Data.raw'
+    }
+    Transparent = True
+  end
+  object d1: TImage
+    Left = 8
+    Top = 392
+    Width = 11
+    Height = 20
+    AutoSize = True
+    Picture.Data = {
+      SaveType = 4
+      File = 'TfrmMain_d1_Picture_Data.raw'
+    }
+    Transparent = True
+  end
+  object d2: TImage
+    Left = 24
+    Top = 392
+    Width = 19
+    Height = 20
+    AutoSize = True
+    Picture.Data = {
+      SaveType = 4
+      File = 'TfrmMain_d2_Picture_Data.raw'
+    }
+    Transparent = True
+  end
+  object d3: TImage
+    Left = 48
+    Top = 392
+    Width = 18
+    Height = 20
+    AutoSize = True
+    Picture.Data = {
+      SaveType = 4
+      File = 'TfrmMain_d3_Picture_Data.raw'
+    }
+    Transparent = True
+  end
+  object d4: TImage
+    Left = 72
+    Top = 392
+    Width = 18
+    Height = 20
+    AutoSize = True
+    Picture.Data = {
+      SaveType = 4
+      File = 'TfrmMain_d4_Picture_Data.raw'
+    }
+    Transparent = True
+  end
+  object d5: TImage
+    Left = 96
+    Top = 392
+    Width = 17
+    Height = 20
+    AutoSize = True
+    Picture.Data = {
+      SaveType = 4
+      File = 'TfrmMain_d5_Picture_Data.raw'
+    }
+    Transparent = True
+  end
+  object d6: TImage
+    Left = 120
+    Top = 392
+    Width = 17
+    Height = 20
+    AutoSize = True
+    Picture.Data = {
+      SaveType = 4
+      File = 'TfrmMain_d6_Picture_Data.raw'
+    }
+    Transparent = True
+  end
+  object d7: TImage
+    Left = 144
+    Top = 392
+    Width = 16
+    Height = 20
+    AutoSize = True
+    Picture.Data = {
+      SaveType = 4
+      File = 'TfrmMain_d7_Picture_Data.raw'
+    }
+    Transparent = True
+  end
+  object d8: TImage
+    Left = 168
+    Top = 392
+    Width = 18
+    Height = 20
+    AutoSize = True
+    Picture.Data = {
+      SaveType = 4
+      File = 'TfrmMain_d8_Picture_Data.raw'
+    }
+    Transparent = True
+  end
+  object d9: TImage
+    Left = 192
+    Top = 392
+    Width = 18
+    Height = 20
+    AutoSize = True
+    Picture.Data = {
+      SaveType = 4
+      File = 'TfrmMain_d9_Picture_Data.raw'
+    }
+    Transparent = True
+  end
+  object d0: TImage
+    Left = 216
+    Top = 392
+    Width = 17
+    Height = 20
+    AutoSize = True
+    Picture.Data = {
+      SaveType = 4
+      File = 'TfrmMain_d0_Picture_Data.raw'
+    }
+    Transparent = True
+  end
+  object imgDay: TImage
+    Left = 8
+    Top = 416
+    Width = 41
+    Height = 20
+    AutoSize = True
+    Picture.Data = {
+      SaveType = 4
+      File = 'TfrmMain_imgDay_Picture_Data.raw'
+    }
+    Transparent = True
+  end
+  object imgDays: TImage
+    Left = 56
+    Top = 416
+    Width = 53
+    Height = 20
+    AutoSize = True
+    Picture.Data = {
+      SaveType = 4
+      File = 'TfrmMain_imgDays_Picture_Data.raw'
+    }
+    Transparent = True
+  end
+  object PopupMenu: TPopupMenu
+    Left = 8
+    Top = 8
+    object pmiAbout: TMenuItem
+      Caption = 'More Christmas stuff...'
+      Default = True
+      OnClick = pmiAboutClick
+    end
+    object N1: TMenuItem
+      Caption = '-'
+    end
+    object Countdown1: TMenuItem
+      Caption = 'Countdown'
+      object pmiChristmas: TMenuItem
+        AutoCheck = True
+        Caption = 'Christmas'
+        Checked = True
+        RadioItem = True
+      end
+      object pmiNewYear: TMenuItem
+        AutoCheck = True
+        Caption = 'New Year'
+        RadioItem = True
+      end
+      object pmiJulian: TMenuItem
+        AutoCheck = True
+        Caption = 'Julian Christmas'
+        RadioItem = True
+      end
+    end
+    object ransparent1: TMenuItem
+      Caption = 'Transparent'
+      object pmi0: TMenuItem
+        AutoCheck = True
+        Caption = '0%'
+        GroupIndex = 1
+        RadioItem = True
+        OnClick = pmi0Click
+      end
+      object pmi10: TMenuItem
+        AutoCheck = True
+        Caption = '10%'
+        Checked = True
+        GroupIndex = 1
+        RadioItem = True
+        OnClick = pmi10Click
+      end
+      object pmi20: TMenuItem
+        AutoCheck = True
+        Caption = '20%'
+        GroupIndex = 1
+        RadioItem = True
+        OnClick = pmi20Click
+      end
+      object pmi30: TMenuItem
+        AutoCheck = True
+        Caption = '30%'
+        GroupIndex = 1
+        RadioItem = True
+        OnClick = pmi30Click
+      end
+      object pmi40: TMenuItem
+        AutoCheck = True
+        Caption = '40%'
+        GroupIndex = 1
+        RadioItem = True
+        OnClick = pmi40Click
+      end
+      object pmi50: TMenuItem
+        AutoCheck = True
+        Caption = '50%'
+        GroupIndex = 1
+        RadioItem = True
+        OnClick = pmi50Click
+      end
+      object pmi60: TMenuItem
+        AutoCheck = True
+        Caption = '60%'
+        GroupIndex = 1
+        RadioItem = True
+        OnClick = pmi60Click
+      end
+      object pmi70: TMenuItem
+        AutoCheck = True
+        Caption = '70%'
+        GroupIndex = 1
+        RadioItem = True
+        OnClick = pmi70Click
+      end
+      object pmi80: TMenuItem
+        AutoCheck = True
+        Caption = '80%'
+        GroupIndex = 1
+        RadioItem = True
+        OnClick = pmi80Click
+      end
+      object pmi90: TMenuItem
+        AutoCheck = True
+        Caption = '90%'
+        GroupIndex = 1
+        RadioItem = True
+        OnClick = pmi90Click
+      end
+    end
+    object pmiOnTop: TMenuItem
+      AutoCheck = True
+      Caption = 'Always OnTop'
+      Checked = True
+      OnClick = pmiOnTopClick
+    end
+    object pmiStartUp: TMenuItem
+      AutoCheck = True
+      Caption = 'Start snowglobe when I start Windows'
+      Checked = True
+    end
+    object N2: TMenuItem
+      Caption = '-'
+    end
+    object pmiExit: TMenuItem
+      Caption = 'Exit'
+      OnClick = pmiExitClick
+    end
+  end
+  object TimerGarland: TTimer
+    Interval = 40
+    OnTimer = TimerGarlandTimer
+    Left = 40
+    Top = 8
+  end
+end
