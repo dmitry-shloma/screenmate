@@ -18,9 +18,6 @@ SOURCES += \
 HEADERS += \
     screenmatewidget.h
 
-FORMS += \
-    screenmatewidget.ui
-
 RESOURCES += \
     resource.qrc
 

@@ -6,26 +6,18 @@
 #include <QList>
 #include <QPoint>
 #include <QMouseEvent>
-#include <QKeyEvent>
 #include <QPair>
 #include <QPixmap>
 #include <QBitmap>
-#include <QSettings>
-
-namespace Ui {
-class ScreenmateWidget;
-}
 
 class ScreenmateWidget : public QWidget
 {
     Q_OBJECT
-
 public:
     explicit ScreenmateWidget(QWidget *parent = 0);
     ~ScreenmateWidget();
 
-    enum Character { Bat, External };
-    enum ConstructionMode { Predefined, BasedOnFixedPoints, Random };
+    enum ConstructMode { Predefined, BasedOnFixedPoints, Random };
 
 protected:
     void paintEvent(QPaintEvent* event);
@@ -37,26 +29,40 @@ private slots:
     void onTimerMove();
 
 private:
-    Ui::ScreenmateWidget *ui;
+    /**
+     * @brief readSettings чтение значений ключей из файла настроек в переменные
+     * @param filename имя файла с настройками
+     */
+    void readSettings(const QString &filename);
 
-    QSettings *settings_;
+    /**
+     * @brief initSprites инициализация спрайтов
+     */
+    void initSprites();
 
-    QTimer* timerDraw_;
-    QTimer* timerMove_;
+    int calcSpritesCountEurestics(const QPixmap &pixmap, const QColor maskColor = Qt::white);
 
-    QList<QPoint> trajectory_;
+    /**
+     * @brief saveTrajectory
+     * @param pos
+     */
+    void saveTrajectory(const QPoint &pos);
+
+    QTimer *timerDraw_;
+    QTimer *timerMove_;
+
     QPoint dragPosition_;
 
     QList<QPair<QPixmap, QBitmap> > sprites_;
     QPixmap currSprite_;
 
+    // значения ключей из файла настроек
     bool isTraining_;
 
-    void initSettings(const QString &fileName);
-    void initSprites(Character character = Bat);
-    void constructTrajectory(ConstructionMode mode = Predefined);
+    int moveSpeed_;
+    int drawSpeed_;
 
-    void saveTrajectory(const QPoint &pos);
-
-    int qrand(int low, int high);
+    QList<QPoint> trajectory_;
+    ConstructMode mode_;
+    //
 };
