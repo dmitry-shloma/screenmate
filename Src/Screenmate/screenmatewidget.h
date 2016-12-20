@@ -6,6 +6,7 @@
 #include <QList>
 #include <QPoint>
 #include <QMouseEvent>
+#include <QTimerEvent>
 #include <QPair>
 #include <QPixmap>
 #include <QBitmap>
@@ -15,7 +16,6 @@ class ScreenmateWidget : public QWidget
     Q_OBJECT
 public:
     explicit ScreenmateWidget(QWidget *parent = 0);
-    ~ScreenmateWidget();
 
     enum ConstructMode { Predefined, BasedOnFixedPoints, Random };
 
@@ -23,24 +23,30 @@ protected:
     void paintEvent(QPaintEvent* event);
     void mousePressEvent(QMouseEvent *event);
     void mouseMoveEvent(QMouseEvent *event);
+    void timerEvent(QTimerEvent *event);
 
 private slots:
-    void onTimerDraw();
     void onTimerMove();
 
 private:
     /**
-     * @brief readSettings чтение значений ключей из файла настроек в переменные
+     * @brief readSettings чтение настроек из файла настроек в соответствующие поля класса
      * @param filename имя файла с настройками
      */
     void readSettings(const QString &filename);
 
     /**
-     * @brief initSprites инициализация спрайтов
+     * @brief initSprites загрузка спрайтов из ресурса в контейнер, являющийся полем класса
+     * @param count количество спрайтов
+     * @param useHeuristicCalcSpritesCount использовать эвристику при подсчете количества спрайтов.
+     * Eсли true, то @param count игнорируется
+     * @param maskColor цвет маски. Игнорируется, если @param useHeuristicCalcSpritesCount
+     * установлен в false
      */
-    void initSprites();
-
-    int calcSpritesCountEurestics(const QPixmap &pixmap, const QColor maskColor = Qt::white);
+    void initSprites(
+            int count,
+            bool useHeuristicCalcSpritesCount = false,
+            const QColor &maskColor = Qt::white);
 
     /**
      * @brief saveTrajectory
@@ -48,7 +54,6 @@ private:
      */
     void saveTrajectory(const QPoint &pos);
 
-    QTimer *timerDraw_;
     QTimer *timerMove_;
 
     QPoint dragPosition_;

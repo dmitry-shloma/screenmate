@@ -11,7 +11,7 @@
 ScreenmateWidget::ScreenmateWidget(QWidget *parent) :
     QWidget(parent)
 {
-    setWindowFlags(Qt::Tool | Qt::FramelessWindowHint | Qt::WindowStaysOnTopHint); // установка флагов окна
+    setWindowFlags(Qt::Tool | Qt::FramelessWindowHint | Qt::WindowStaysOnTopHint);
 
     const QString fileName = QString("%1%2%3.conf")
             .arg(QApplication::applicationDirPath())
@@ -19,7 +19,7 @@ ScreenmateWidget::ScreenmateWidget(QWidget *parent) :
             .arg(QApplication::applicationName());
 
     readSettings(fileName);
-    initSprites();
+    initSprites(5);
 
     if (!isTraining_) {
         onTimerMove();
@@ -28,16 +28,8 @@ ScreenmateWidget::ScreenmateWidget(QWidget *parent) :
         timerMove_->start(moveSpeed_);
     }
 
-    onTimerDraw();
-    timerDraw_ = new QTimer(this);
-    connect(timerDraw_, SIGNAL(timeout()), this, SLOT(onTimerDraw()));
-    timerDraw_->start(drawSpeed_);
-}
-
-ScreenmateWidget::~ScreenmateWidget()
-{
-    delete timerMove_;
-    delete timerDraw_;
+    timerEvent(0);
+    startTimer(drawSpeed_);
 }
 
 void ScreenmateWidget::paintEvent(QPaintEvent* event)
@@ -51,7 +43,7 @@ void ScreenmateWidget::paintEvent(QPaintEvent* event)
 void ScreenmateWidget::mousePressEvent(QMouseEvent *event)
 {
     if (event->button() == Qt::RightButton) {
-        QApplication::exit();
+        qApp->exit();
     }
 
     if (!isTraining_) {
@@ -78,8 +70,10 @@ void ScreenmateWidget::mouseMoveEvent(QMouseEvent *event)
     }
 }
 
-void ScreenmateWidget::onTimerDraw()
+void ScreenmateWidget::timerEvent(QTimerEvent *event)
 {
+    Q_UNUSED(event);
+
     static int i = 0;
 
     currSprite_ = sprites_.at(i).first;
@@ -106,7 +100,8 @@ void ScreenmateWidget::readSettings(const QString &filename)
     moveSpeed_ = settings.value("Sprite/moveSpeed", 15).toInt();
     drawSpeed_ = settings.value("Sprite/drawSpeed", 250).toInt();
 
-    QStringList points = settings.value("Trajectory/points").toString().split(";", QString::SkipEmptyParts);
+    QStringList points = settings.value("Trajectory/points").toString()
+            .split(";", QString::SkipEmptyParts);
     Q_FOREACH(QString point, points) {
         int x = point.section(',', 0, 0).toInt();
         int y = point.section(',', 1, 1).toInt();
@@ -124,9 +119,8 @@ void ScreenmateWidget::readSettings(const QString &filename)
 
 void ScreenmateWidget::saveTrajectory(const QPoint &pos)
 {
-    static QString fileName = QString("%1%2savedTrajectory.log")
-            .arg(QApplication::applicationDirPath())
-            .arg(QDir::separator());
+    static QString fileName = QString("%1/savedTrajectory.log")
+            .arg(QApplication::applicationDirPath());
 
     QFile file(fileName);
     if (!file.open(QIODevice::WriteOnly | QIODevice::Text | QIODevice::Append)) {
@@ -139,11 +133,33 @@ void ScreenmateWidget::saveTrajectory(const QPoint &pos)
     file.close();
 }
 
-void ScreenmateWidget::initSprites()
+void ScreenmateWidget::initSprites(
+        int count, bool useHeuristicCalcSpritesCount, const QColor &maskColor)
 {
     QPixmap pixmap("://characters/bat.png");
-    int count = /*calcSpritesCountEurestics(pixmap)*/5;
-    int spriteWidth = pixmap.width() / count;
+    int spriteCount = 0;
+    if (!useHeuristicCalcSpritesCount) {
+        spriteCount = count;
+    } else {
+        QImage image = pixmap.toImage();
+
+        bool inSprite = false;
+        for (int x = 0; x < image.width(); ++x) {
+            for (int y = 0; y < image.height(); ++y) {
+                if (image.pixel(x, y) != maskColor.rgb()) {
+                    inSprite = true;
+                    goto abortLineScan;
+                }
+            }
+            if (inSprite) {
+                inSprite = false;
+                spriteCount++;
+            }
+            abortLineScan: ;
+        }
+    }
+
+    int spriteWidth = pixmap.width() / spriteCount;
     int spriteHeigth = pixmap.height();
 
     for (int i = 0; i < pixmap.width(); i += spriteWidth) {
@@ -151,25 +167,4 @@ void ScreenmateWidget::initSprites()
         QBitmap mask = sprite.createHeuristicMask();
         sprites_.append(QPair<QPixmap, QBitmap>(sprite, mask));
     }
-}
-
-int ScreenmateWidget::calcSpritesCountEurestics(const QPixmap &pixmap, const QColor maskColor)
-{
-    QImage image = pixmap.toImage();
-
-    bool inSprite = false;
-    int count = 0;
-
-    for (int x = 0; x < image.width(); ++x) {
-        for (int y = 0; y < image.height(); ++y) {
-            if (image.pixel(x, y) != maskColor.rgb()) {
-                inSprite = true;
-            }
-        }
-        if (!inSprite) {
-            count++;
-        }
-    }
-
-    return count;
 }
