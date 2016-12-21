@@ -17,8 +17,6 @@ class ScreenmateWidget : public QWidget
 public:
     explicit ScreenmateWidget(QWidget *parent = 0);
 
-    enum ConstructMode { Predefined, BasedOnFixedPoints, Random };
-
 protected:
     void paintEvent(QPaintEvent* event);
     void mousePressEvent(QMouseEvent *event);
@@ -54,12 +52,19 @@ private:
      */
     void saveTrajectory(const QPoint &pos);
 
+    enum ConstructMode { Predefined, BasedOnFixedPoints, Random };
+    enum MovementDirection { toLeft, toRight };
+
     QTimer *timerMove_;
 
     QPoint dragPosition_;
 
-    QList<QPair<QPixmap, QBitmap> > sprites_;
+    QList<QPair<QPixmap, QBitmap> > sprites_;           // спрайты для направления toLeft
+    QList<QPair<QPixmap, QBitmap> > mirroredSprites_;   // спрайты для направления toRight
+
     QPixmap currSprite_;
+
+    MovementDirection direction_;
 
     // значения ключей из файла настроек
     bool isTraining_;

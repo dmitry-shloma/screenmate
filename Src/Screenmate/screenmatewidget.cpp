@@ -9,7 +9,8 @@
 #include <QTextStream>
 
 ScreenmateWidget::ScreenmateWidget(QWidget *parent) :
-    QWidget(parent)
+    QWidget(parent),
+    direction_(toLeft)
 {
     setWindowFlags(Qt::Tool | Qt::FramelessWindowHint | Qt::WindowStaysOnTopHint);
 
@@ -65,6 +66,15 @@ void ScreenmateWidget::mouseMoveEvent(QMouseEvent *event)
     if (event->buttons() & Qt::LeftButton) {
         QPoint pos = event->globalPos() - dragPosition_;
         move(pos);
+        static QPoint oldPos = pos;
+        if (pos.x() > oldPos.x()) {
+            direction_ = toRight;
+            oldPos = pos;
+
+        } else if (pos.x() < oldPos.x()) {
+            direction_ = toLeft;
+            oldPos = pos;
+        }
         saveTrajectory(pos);
         event->accept();
     }
@@ -76,8 +86,14 @@ void ScreenmateWidget::timerEvent(QTimerEvent *event)
 
     static int i = 0;
 
-    currSprite_ = sprites_.at(i).first;
-    setMask(sprites_.at(i).second);
+    if (direction_ == toLeft) {
+        currSprite_ = sprites_.at(i).first;
+        setMask(sprites_.at(i).second);
+    } else if (direction_ == toRight) {
+        currSprite_ = mirroredSprites_.at(i).first;
+        setMask(mirroredSprites_.at(i).second);
+    }
+
     i = (i == sprites_.size() - 1) ? 0 : i + 1;
     emit update();
 }
@@ -166,5 +182,9 @@ void ScreenmateWidget::initSprites(
         QPixmap sprite = pixmap.copy(i, 0, spriteWidth, spriteHeigth);
         QBitmap mask = sprite.createHeuristicMask();
         sprites_.append(QPair<QPixmap, QBitmap>(sprite, mask));
+
+        QPixmap mirroredSprite = QPixmap::fromImage(sprite.toImage().mirrored(true, false));
+        QBitmap mirroredMask = mirroredSprite.createHeuristicMask();
+        mirroredSprites_.append(QPair<QPixmap, QBitmap>(mirroredSprite, mirroredMask));
     }
 }
