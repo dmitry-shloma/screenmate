@@ -1,0 +1,9 @@
+# dirs
+[Bb]uild*
+!BuildEssential
+
+# settings
+[Ss]rc/*.pro.user
+
+# other
+.directory
