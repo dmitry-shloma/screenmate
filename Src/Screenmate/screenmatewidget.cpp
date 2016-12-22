@@ -7,20 +7,23 @@
 #include <QDir>
 #include <QFile>
 #include <QTextStream>
+#include <QDesktopWidget>
+#include <qmath.h>
+#include <QSystemTrayIcon>
 
 ScreenmateWidget::ScreenmateWidget(QWidget *parent) :
     QWidget(parent),
     direction_(toLeft)
 {
     setWindowFlags(Qt::Tool | Qt::FramelessWindowHint | Qt::WindowStaysOnTopHint);
+    setWindowTitle(QApplication::applicationName());
 
-    const QString fileName = QString("%1%2%3.conf")
+    const QString fileName = QString("%1/%2.conf")
             .arg(QApplication::applicationDirPath())
-            .arg(QDir::separator())
             .arg(QApplication::applicationName());
 
     readSettings(fileName);
-    initSprites(5);
+    initSprites(5, true);
 
     if (!isTraining_) {
         onTimerMove();
@@ -75,7 +78,7 @@ void ScreenmateWidget::mouseMoveEvent(QMouseEvent *event)
             direction_ = toLeft;
             oldPos = pos;
         }
-        saveTrajectory(pos);
+
         event->accept();
     }
 }
@@ -106,47 +109,69 @@ void ScreenmateWidget::onTimerMove()
     int y = trajectory_.at(i).y();
     i = (i == trajectory_.size() - 1) ? 0 : i + 1;
     move(x, y);
+
+    static int oldX = x;
+    if (x > oldX) {
+        direction_ = toRight;
+        oldX = x;
+
+    } else if (x < oldX) {
+        direction_ = toLeft;
+        oldX = x;
+    }
+
 }
 
 void ScreenmateWidget::readSettings(const QString &filename)
 {
     QSettings settings(filename, QSettings::IniFormat);
-    isTraining_ = settings.value("Training/isTraining", false).toBool();
+    isTraining_ = settings.value("Training/isTraining", true).toBool();
 
     moveSpeed_ = settings.value("Sprite/moveSpeed", 15).toInt();
-    drawSpeed_ = settings.value("Sprite/drawSpeed", 250).toInt();
+    drawSpeed_ = settings.value("Sprite/drawSpeed", 150).toInt();
 
-    QStringList points = settings.value("Trajectory/points").toString()
+    QStringList points = settings.value("Sprite/trajectory").toString()
             .split(";", QString::SkipEmptyParts);
-    Q_FOREACH(QString point, points) {
-        int x = point.section(',', 0, 0).toInt();
-        int y = point.section(',', 1, 1).toInt();
-        trajectory_.append(QPoint(x, y));
+    QString constructMode = settings.value("Sprite/constructMode", "random").toString();
+
+    if (constructMode.compare("predefined", Qt::CaseSensitive) == 0) {
+        constructMode_ = Predefined;
+
+    } else if (constructMode.compare("basedOnFixedPoints", Qt::CaseSensitive) == 0) {
+        constructMode_ = BasedOnFixedPoints;
+
+    } else if (constructMode.compare("random", Qt::CaseSensitive) == 0) {
+        constructMode_ = Random;
     }
-    QString modeStr = settings.value("Trajectory/mode", "predefined").toString();
-    if (modeStr.compare("predefined", Qt::CaseSensitive)) {
-        mode_ = Predefined;
-    } else if (modeStr.compare("basedOnFixedPoints", Qt::CaseSensitive)) {
-        mode_ = BasedOnFixedPoints;
-    } else if (modeStr.compare("random", Qt::CaseSensitive)) {
-        mode_ = Random;
-    }
+
+    trajectory_ = constructTrajectory(points);
 }
 
-void ScreenmateWidget::saveTrajectory(const QPoint &pos)
+QList<QPoint> ScreenmateWidget::constructTrajectory(const QStringList &points)
 {
-    static QString fileName = QString("%1/savedTrajectory.log")
-            .arg(QApplication::applicationDirPath());
+    QList<QPoint> trajectory;
 
-    QFile file(fileName);
-    if (!file.open(QIODevice::WriteOnly | QIODevice::Text | QIODevice::Append)) {
-        return;
+    switch (constructMode_) {
+    case Predefined:
+        Q_FOREACH(QString point, points) {
+            int x = point.section(',', 0, 0).toInt();
+            int y = point.section(',', 1, 1).toInt();
+            trajectory.append(QPoint(x, y));
+        }
+        break;
+    case BasedOnFixedPoints:
+        break;
+    case Random:
+        QDesktopWidget desktop;
+        QRect desktopRect = desktop.screenGeometry();
+
+        const int coef = 100.0;
+        for (int x = 0; x < desktopRect.width(); ++x) {
+            int y = 800 + qRound(coef * qAbs(qSin(5.0 * x)));
+            trajectory.append(QPoint(x, y));
+        }
     }
-
-    QTextStream out(&file);
-    QString str = QString("%1,%2;").arg(pos.x()).arg(pos.y());
-    out << str;
-    file.close();
+    return trajectory;
 }
 
 void ScreenmateWidget::initSprites(

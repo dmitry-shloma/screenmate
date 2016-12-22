@@ -7,6 +7,7 @@
 #include <QPoint>
 #include <QMouseEvent>
 #include <QTimerEvent>
+#include <QKeyEvent>
 #include <QPair>
 #include <QPixmap>
 #include <QBitmap>
@@ -28,13 +29,23 @@ private slots:
 
 private:
     /**
+     * @brief The ConstructMode enum режимы конструирования траектории
+     */
+    enum ConstructMode { Predefined, BasedOnFixedPoints, Random };
+
+    /**
+     * @brief The MovementDirection enum направления движения
+     */
+    enum MovementDirection { toLeft, toRight };
+
+    /**
      * @brief readSettings чтение настроек из файла настроек в соответствующие поля класса
      * @param filename имя файла с настройками
      */
     void readSettings(const QString &filename);
 
     /**
-     * @brief initSprites загрузка спрайтов из ресурса в контейнер, являющийся полем класса
+     * @brief initSprites загрузка спрайтов из ресурса в контейнер (поле класса)
      * @param count количество спрайтов
      * @param useHeuristicCalcSpritesCount использовать эвристику при подсчете количества спрайтов.
      * Eсли true, то @param count игнорируется
@@ -47,13 +58,11 @@ private:
             const QColor &maskColor = Qt::white);
 
     /**
-     * @brief saveTrajectory
-     * @param pos
+     * @brief constructTrajectory конструирование траектории
+     * @param points
+     * @return
      */
-    void saveTrajectory(const QPoint &pos);
-
-    enum ConstructMode { Predefined, BasedOnFixedPoints, Random };
-    enum MovementDirection { toLeft, toRight };
+    QList<QPoint> constructTrajectory(const QStringList &points = QStringList());
 
     QTimer *timerMove_;
 
@@ -67,12 +76,12 @@ private:
     MovementDirection direction_;
 
     // значения ключей из файла настроек
-    bool isTraining_;
+    bool isTraining_;               // тренировочный режим
 
-    int moveSpeed_;
-    int drawSpeed_;
+    int moveSpeed_;                 // скорость перемещения
+    int drawSpeed_;                 // скорость отрисовки
 
-    QList<QPoint> trajectory_;
-    ConstructMode mode_;
+    QList<QPoint> trajectory_;      // траектория
+    ConstructMode constructMode_;   // режим конструирования траектории
     //
 };
