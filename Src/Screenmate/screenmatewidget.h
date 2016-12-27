@@ -11,6 +11,9 @@
 #include <QPair>
 #include <QPixmap>
 #include <QBitmap>
+#include <QSystemTrayIcon>
+#include <QMenu>
+#include <QSignalMapper>
 
 class ScreenmateWidget : public QWidget
 {
@@ -26,6 +29,15 @@ protected:
 
 private slots:
     void onTimerMove();
+    void onTrayIconActivated(QSystemTrayIcon::ActivationReason reason);
+
+    /// Слоты для элементов меню
+    void onGarlandAct();
+    void onStarsAct();
+    void onAnimationAct();
+    void onTransparentActSelected(int level);
+    void onExitAct();
+    ///
 
 private:
     /**
@@ -58,6 +70,18 @@ private:
             const QColor &maskColor = Qt::white);
 
     /**
+     * @brief createTrayIcon
+     * @param contextMenu указатель на контекстное меню
+     */
+    void createTrayIcon(QMenu *contextMenu);
+
+    /**
+     * @brief createTrayIconMenu создание меню
+     * @return указатель на меню
+     */
+    QMenu *createTrayIconMenu();
+
+    /**
      * @brief constructTrajectory конструирование траектории
      * @param points
      * @return
@@ -68,15 +92,17 @@ private:
 
     QPoint dragPosition_;
 
-    QList<QPair<QPixmap, QBitmap> > sprites_;           // спрайты для направления toLeft
-    QList<QPair<QPixmap, QBitmap> > mirroredSprites_;   // спрайты для направления toRight
+    QList<QPair<QPixmap, QBitmap> > sprites_;           // контейнер для спрайтов (направление toLeft)
+    QList<QPair<QPixmap, QBitmap> > mirroredSprites_;   // контейнер для спрайтов (направление toRight)
 
     QPixmap currSprite_;
 
     MovementDirection direction_;
 
+    QSystemTrayIcon *trayIcon_;
+
     // значения ключей из файла настроек
-    bool isTraining_;               // тренировочный режим
+    bool isTrainingMode_;               // тренировочный режим
 
     int moveSpeed_;                 // скорость перемещения
     int drawSpeed_;                 // скорость отрисовки
@@ -84,4 +110,6 @@ private:
     QList<QPoint> trajectory_;      // траектория
     ConstructMode constructMode_;   // режим конструирования траектории
     //
+
+    QSignalMapper *signalMapper_;
 };
