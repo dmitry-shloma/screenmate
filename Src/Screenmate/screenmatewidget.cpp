@@ -50,10 +50,6 @@ void ScreenmateWidget::paintEvent(QPaintEvent* event)
 
 void ScreenmateWidget::mousePressEvent(QMouseEvent *event)
 {
-    if (event->button() == Qt::RightButton) {
-        qApp->exit();
-    }
-
     if (!isTrainingMode_) {
         return;
     }

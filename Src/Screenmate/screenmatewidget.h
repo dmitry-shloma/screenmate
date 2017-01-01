@@ -32,6 +32,7 @@ private slots:
     void onTrayIconActivated(QSystemTrayIcon::ActivationReason reason);
 
     /// Слоты для элементов меню
+//    void onIsTrainingModeAct();
     void onGarlandAct();
     void onStarsAct();
     void onAnimationAct();
