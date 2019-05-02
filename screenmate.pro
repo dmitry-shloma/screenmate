@@ -1,4 +1,10 @@
 TEMPLATE = subdirs
 
-SUBDIRS += \
+SUBDIRS = \
     src
+
+OTHER_FILES = \
+    .gitignore \
+    LICENSE \
+    INSTALL \
+    README

@@ -1,6 +1,5 @@
 # dirs
 [Bb]uild*
-!BuildEssential
 
 # settings
 [Ss]rc/*.pro.user
