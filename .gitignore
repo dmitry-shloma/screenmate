@@ -2,7 +2,7 @@
 [Bb]uild*
 
 # settings
-[Ss]rc/*.pro.user
+*.pro.user
 
 # other
 .directory
