@@ -1,4 +1,4 @@
 TEMPLATE = subdirs
 
 SUBDIRS += \
-    Screenmate
+    screenmate

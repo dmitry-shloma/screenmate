@@ -25,7 +25,7 @@ int main(int argc, char *argv[])
                     0,
                     QApplication::applicationName(),
                     "couldn't detect any system tray on this platform");
-        qApp->exit(EXIT_FAILURE);
+        return EXIT_FAILURE;
     }
     QApplication::setQuitOnLastWindowClosed(false);
 

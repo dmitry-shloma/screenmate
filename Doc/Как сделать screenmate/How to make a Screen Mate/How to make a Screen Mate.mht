@@ -1,0 +1,820 @@
+From: <Сохранено Microsoft Internet Explorer 5>
+Subject: How to make a Screen Mate
+Date: Mon, 27 Mar 2006 11:30:28 +0700
+MIME-Version: 1.0
+Content-Type: multipart/related;
+	type="text/html";
+	boundary="----=_NextPart_000_0000_01C65191.D95A9D60"
+X-MimeOLE: Produced By Microsoft MimeOLE V6.00.2900.2180
+
+This is a multi-part message in MIME format.
+
+------=_NextPart_000_0000_01C65191.D95A9D60
+Content-Type: text/html;
+	charset="iso-8859-1"
+Content-Transfer-Encoding: quoted-printable
+Content-Location: http://goblin.prestosite.net/smtutor/transparent.htm
+
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<HTML><HEAD><TITLE>How to make a Screen Mate</TITLE>
+<META http-equiv=3DContent-Type content=3D"text/html; =
+charset=3Diso-8859-1">
+<META http-equiv=3DContent-Language content=3Den-us>
+<META http-equiv=3DKEYWORDS=20
+content=3D"tutor,screen mates programming,transparent windows in =
+Win32,&#13;&#10;smallgoblin,Win32 regions, screen mates">
+<META http-equiv=3DDESCRIPTION=20
+content=3D"A tutor about creating transparent windows for screen mates =
+under MS Windows">
+<META content=3D"MSHTML 6.00.2900.2180" name=3DGENERATOR></HEAD>
+<BODY>
+<P align=3Dcenter><FONT face=3DTahoma><A name=3DPageTop></A><STRONG>How =
+to make a=20
+Screen Mate:</STRONG></FONT></P>
+<P align=3Dcenter><FONT face=3DTahoma size=3D4><STRONG>Animated =
+Transparent=20
+Windows&nbsp; </STRONG><FONT size=3D2>v.1.2</FONT></FONT></P>
+<P><FONT face=3DTahoma size=3D2>Since I have published smallGoblin in =
+spring 2000,=20
+there were many letters with questions - how to create such =
+software?&nbsp; So,=20
+here is a short overview, to help those, who spend time, creating =
+useless &amp;=20
+crazy programs.&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</FONT></P>
+<P><FONT face=3DTahoma size=3D2>The most important problem for Screen =
+Mate is -=20
+<B>how to make a window transparent</B>?&nbsp;</FONT></P>
+<P><FONT face=3DTahoma size=3D2>There seems to be 4 ways to do this in =
+MS=20
+Windows:</FONT></P>
+<OL>
+  <LI><A =
+href=3D"http://goblin.prestosite.net/smtutor/transparent.htm#Way1"><FONT =
+
+  face=3DTahoma size=3D2>Redrawing background manually</FONT></A>=20
+  <LI><A =
+href=3D"http://goblin.prestosite.net/smtutor/transparent.htm#Way2"><FONT =
+
+  face=3DTahoma size=3D2>Win32 Regions</FONT></A>=20
+  <LI><A =
+href=3D"http://goblin.prestosite.net/smtutor/transparent.htm#Way3"><FONT =
+
+  face=3DTahoma size=3D2>DirectDraw Overlays</FONT></A>=20
+  <LI><A =
+href=3D"http://goblin.prestosite.net/smtutor/transparent.htm#Way4"><FONT =
+
+  face=3DTahoma size=3D2>Microsoft Agent</FONT></A><FONT face=3DTahoma=20
+  size=3D2>&nbsp;</FONT> </LI></OL>
+<P><FONT face=3DTahoma size=3D2>See also the</FONT> <FONT face=3DTahoma =
+size=3D2><A=20
+href=3D"http://goblin.prestosite.net/smtutor/transparent.htm#Conclusions"=
+>Conclusions</A></FONT></P>
+<P align=3Dcenter><B><FONT face=3DTahoma size=3D3><A name=3DWay1></A>1. =
+Redrawing=20
+background manually&nbsp;</FONT></B></P>
+<P><FONT face=3DTahoma size=3D2>This strategy was used by almost all old =
+Screen=20
+Mates, including famous Scam Poo.&nbsp; <IMG height=3D40=20
+src=3D"http://goblin.prestosite.net/smtutor/scampoo.gif" width=3D40 =
+border=3D0>It is=20
+still popular among some developers.</FONT></P>
+<P><FONT face=3DTahoma size=3D2>The trick is to receive a part of a =
+desktop, which=20
+is covered by Screen Mate's window, as an image. And then draw it in the =
+Screen=20
+Mate's window. Then to draw in the same window the image of the Screen =
+Mate,=20
+without changing pixels, which are transparent. And it'll look like the =
+image is=20
+transparent.&nbsp;</FONT></P>
+<P><FONT face=3DTahoma size=3D2>I have also heard, that if standard =
+WM_ERASEBKGND=20
+(or smth. like this ;-)) event handler for window is overrided with the =
+empty=20
+function (returning proper value), we'll have the same effect. But I =
+failed to=20
+do this (frankly speaking I haven't tried =
+much).&nbsp;&nbsp;&nbsp;</FONT></P>
+<P><FONT face=3DTahoma size=3D2>The advantage of this technology is that =
+it works on=20
+any Windows - from 3.1 till 2000 (I guess so :)). It is also quite=20
+fast.&nbsp;&nbsp;</FONT></P>
+<P><FONT face=3DTahoma size=3D2>The disadvantage is big - background is =
+redrawing=20
+not very good. Especially when user opens, closes, moves windows behind =
+the=20
+Screen Mate - the Mate does not redrawing background quickly enough, the =
+image=20
+twinkles, etc.&nbsp;</FONT></P>
+<P><FONT face=3DTahoma><FONT size=3D2>Essentially, there is not much =
+known for me=20
+about this technique, 'cause we selected Win32 regions&nbsp;as an engine =
+for=20
+smallGoblin.</FONT></FONT></P>
+<P align=3Dcenter><FONT face=3DTahoma size=3D3><B><A name=3DWay2></A>2. =
+Win32=20
+Regions</B></FONT></P>
+<P><B><FONT face=3DTahoma size=3D2>2.1 Transparent window</FONT></B></P>
+<P><FONT face=3DTahoma size=3D2>This is a legal way to make transparent =
+window in MS=20
+Windows (since Windows 95). Here is the code:</FONT></P>
+<P><CODE>--------------- [cut] -----------<BR>//&nbsp; Defining=20
+variables<BR>HRGN rgn1, rgn2;&nbsp;&nbsp;&nbsp;&nbsp; // =
+regions</CODE></P>
+<P><CODE>HWND =
+hwnd1;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; //=20
+window handle</CODE></P>
+<P><CODE>//&nbsp; Create any regions with the standard Win32 function=20
+(CreateRectRgn, CreateEllipticRgn, CreatePolygonRgn, etc.):<BR>rgn1 =3D=20
+CreateEllipticRgn(0,0,10,10);&nbsp; // create circle 1</CODE></P>
+<P><CODE>rgn2 =3D CreateEllipticRgn(5,5,20,20);&nbsp; // create circle=20
+2</CODE></P>
+<P><CODE>//&nbsp; Combine a complex region from simple=20
+regions<BR>CombineRgn(rgn1,rgn1,rgn2,RGN_OR);&nbsp;&nbsp;&nbsp; // =
+combine two=20
+circles<BR><BR>// Delete useless=20
+object<BR>DeleteObject(rgn2);&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&n=
+bsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=20
+// delete useless region of circle 1<BR><BR>hwnd1 =3D ...&nbsp;&nbsp; =
+;&nbsp; //=20
+hwnd1 must point to the form window, which will be=20
+transparent</CODE></P><BR><CODE>// Set the window region of a window=20
+Handle<BR></CODE><CODE>if ( rgn1 !=3D 0 ) SetWindowRgn( hwnd1 , rgn1, =
+true ); //=20
+applying region to the window<BR>--------------- [cut] =
+-----------</CODE>=20
+<P><B><FONT face=3DTahoma size=3D2>2.2&nbsp; Transparent =
+image</FONT></B></P>
+<P><FONT face=3DTahoma size=3D2>Now we can make transparent windows. Ok, =
+but how to=20
+create a region for the<B> specific image</B>? And to make it =
+transparent for a=20
+special color in the image? Well, I don't know the excellent solution. =
+It's=20
+possible to create an <B>array of&nbsp; points of polygon</B> which =
+describes=20
+the image, and use&nbsp; CreatePolygonRgn() Win32 function to create a =
+polygonal=20
+region.&nbsp; Or to use the <B>algorithm of smallGobiln</B>. <IMG =
+height=3D41=20
+src=3D"http://goblin.prestosite.net/images/gobguit1.gif" width=3D50 =
+border=3D0> It is=20
+divided into 2 parts (for quick dynamic animation. see the next =
+section). First=20
+part creates a temporary array of rectangles (rects) on program start. =
+The=20
+second part creates a region from this array with CreateRectRgn() /=20
+CombineRgn()&nbsp; Win32 functions (dynamically on every window =
+repaint).<BR>The=20
+main idea is simple.&nbsp;Function scans the image, pixel by pixel, =
+creates a=20
+small rectangular regions for every not-transparent pixel &amp; combine =
+them=20
+into 1 main region.&nbsp; The smallGoblin algorithm is just the improved =
+version=20
+of this idea. We are creating regions not for pixels, but for vertical =
+lines. We=20
+also can reduce the number of lines by combining them into rectangles=20
+(PackRectListV()) when it is possible.</FONT></P>
+<P><FONT face=3DTahoma size=3D2>Here are corresponding functions =
+from&nbsp;=20
+smallGoblin&nbsp; code (C++Builder 3):</FONT></P>
+<P><CODE>--------------- [cut] -----------<BR></CODE></P>
+<P><CODE>#define iSprites 36&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; // we =
+have 36=20
+sprites</CODE></P>
+<P><CODE>unsigned char RegionRects[iSprites][4][76];&nbsp;&nbsp;&nbsp; =
+// 36=20
+sprites,&nbsp;<BR>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&=
+nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&n=
+bsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nb=
+sp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbs=
+p;=20
+// 4 coordinates (left,top,right,bottom), 76 maximum rects<BR>unsigned =
+char=20
+NumberOfRects[iSprites];&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; =
+//=20
+number of rects in every array</CODE></P>
+<P>....</P>
+<P><CODE>// Create an array of rects from an image in Can; image rect=3D =
+R; store=20
+info in a global array with&nbsp;<BR>// Id =3D iSprite<BR>void =
+CreateRectListV(=20
+TCanvas* Can, TRect* R, int iSprite)<BR>{<BR><BR>&nbsp;int X,Y,Ye=20
+;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; //&nbsp; picture - =
+scanning=20
+variables<BR>&nbsp;int clTransparent;&nbsp;&nbsp; //&nbsp; transparent=20
+color<BR>&nbsp;int iRects =3D 0;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; //&nbsp; =
+rects=20
+counter<BR><BR>&nbsp;X =3D=20
+R-&gt;Left;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; //&nbsp; =
+start&nbsp;=20
+scanning from left-top cornen<BR>&nbsp;Y =3D =
+R-&gt;Top;<BR><BR>&nbsp;clTransparent=20
+=3D Can-&gt;Pixels[X][Y]; // First top-left point is considered to=20
+be<BR>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&=
+nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&n=
+bsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=20
+//&nbsp; a transparent color<BR>&nbsp;do<BR>&nbsp;{<BR>&nbsp; // take =
+first=20
+point<BR>&nbsp; while (Can-&gt;Pixels[X][Y] =3D=3D clTransparent =
+)<BR>&nbsp;=20
+{<BR>&nbsp;&nbsp; Y++ ;<BR>&nbsp;&nbsp; if ( Y &gt;R-&gt;Bottom=20
+)<BR>&nbsp;&nbsp;&nbsp; {<BR>&nbsp;&nbsp;&nbsp;&nbsp; Y =3D R-&gt;Top;=20
+X++;<BR>&nbsp;&nbsp;&nbsp;&nbsp; if ( X &gt;R-&gt;Right )=20
+break;<BR>&nbsp;&nbsp;&nbsp; }<BR>&nbsp; }<BR><BR>&nbsp;if ( X =
+&gt;R-&gt;Right )=20
+break;<BR>&nbsp;// take end point<BR>&nbsp;Ye =3D Y;<BR>&nbsp;while=20
+(Can-&gt;Pixels[X][Ye] !=3D clTransparent )<BR>&nbsp;{<BR>&nbsp; =
+Ye++;<BR>&nbsp;=20
+if ( Ye &gt;R-&gt;Bottom ) break;<BR>&nbsp;}<BR><BR>// now storing new =
+rect in a=20
+global array<BR>&nbsp;frmGoblin-&gt;RegionRects[iSprite][0][iRects] =3D =
+X=20
+-R-&gt;Left;<BR>&nbsp;frmGoblin-&gt;RegionRects[iSprite][1][iRects] =3D =
+Y=20
+-R-&gt;Top;<BR>&nbsp;frmGoblin-&gt;RegionRects[iSprite][2][iRects] =3D X =
+
+-R-&gt;Left;<BR>&nbsp;frmGoblin-&gt;RegionRects[iSprite][3][iRects] =3D =
+Ye - 1=20
+-R-&gt;Top;<BR>&nbsp;iRects++;<BR>&nbsp;if =
+(iRects&gt;75)<BR>&nbsp;{<BR>&nbsp;=20
+ShowMessage("Internal Error - Too many rects " + =
+IntToStr(iSprite));<BR>&nbsp;=20
+break;<BR>&nbsp;}<BR>&nbsp;if (Ye &gt;R-&gt;Bottom ) { Ye =3D R-&gt;Top; =
+X++;=20
+}<BR>&nbsp;Y =3D Ye;<BR>&nbsp;}<BR>&nbsp;while ( X &lt;=3D R-&gt;Right=20
+);<BR>&nbsp;// storing the number of rects, in the global=20
+array<BR>&nbsp;frmGoblin-&gt;NumberOfRects[iSprite] =3D=20
+iRects;<BR>}<BR></CODE></P>
+<P><CODE>//--------------------------------------------------------------=
+-----------<BR>//=20
+This function pack all rects (to near rects are converted to 1=20
+rect),&nbsp;<BR>// so that they'll take less place<BR>// returns how =
+many=20
+rectangles saved, in %<BR>int PackRectListV( )<BR>{<BR>&nbsp;-- skipped=20
+--&nbsp;&nbsp;&nbsp;</CODE></P>
+<P><CODE>}</CODE></P>
+<P><CODE>//--------------------------------------------------------------=
+-----------<BR>//=20
+This function dynamically creates a region from rects array<BR>//&nbsp; =
+iSprite=20
+- ID of the rect array to use<BR></CODE><CODE>HRGN CreateRgnFormRects( =
+int=20
+iSprite)<BR>{<BR>&nbsp;HRGN h1,h2;<BR><BR>&nbsp;int iRects =3D=20
+frmGoblin-&gt;NumberOfRects[iSprite];<BR>&nbsp;if ( iRects &lt; 1 ) =
+return=20
+0;<BR><BR>&nbsp;h1 =3D=20
+CreateRectRgn(frmGoblin-&gt;RegionRects[iSprite][0][0],<BR>&nbsp;frmGobli=
+n-&gt;RegionRects[iSprite][1][0],<BR>&nbsp;frmGoblin-&gt;RegionRects[iSpr=
+ite][2][0]+1,<BR>&nbsp;frmGoblin-&gt;RegionRects[iSprite][3][0]+1);<BR><B=
+R>&nbsp;if=20
+( iRects =3D=3D 1 ) return h1;<BR><BR>&nbsp;for ( int i =3D 1; i &lt; =
+iRects; i++=20
+)<BR>&nbsp;{<BR>&nbsp; h2 =3D=20
+CreateRectRgn(frmGoblin-&gt;RegionRects[iSprite][0][i],<BR>&nbsp;frmGobli=
+n-&gt;RegionRects[iSprite][1][i],<BR>&nbsp;frmGoblin-&gt;RegionRects[iSpr=
+ite][2][i]+1,<BR>&nbsp;frmGoblin-&gt;RegionRects[iSprite][3][i]+1);<BR>&n=
+bsp;=20
+CombineRgn(h1,h1,h2,RGN_OR);<BR>&nbsp;=20
+DeleteObject(h2);<BR>&nbsp;}<BR>&nbsp;return=20
+h1;<BR>}<BR></CODE><CODE>--------------- [cut] =
+-----------<BR></CODE></P>
+<P><B><FONT face=3DTahoma size=3D2>2.3&nbsp; Animated transparent =
+image<IMG=20
+height=3D42 src=3D"http://goblin.prestosite.net/images/musicon.gif" =
+width=3D50=20
+border=3D0></FONT></B></P>
+<P><FONT face=3DTahoma size=3D2>That's the most difficult part, 'cause I =
+haven't=20
+found how to store pre-generated regions somewhere. Of course, you can =
+say - it=20
+is possible to create many windows with different images &amp; different =
+
+regions, and to show only 1 at a time. Hmmm... but how much resources =
+this will=20
+take, if we have, f.e. 36 images?&nbsp; And if we try to run 10 Goblins? =
+We'll=20
+have 360 windows.... %)&nbsp; No! That's not our way.&nbsp; The Goblin =
+do this:=20
+1. Create a temporary array of rects for every sprite at program start. =
+And then=20
+creates new region from this array on EVERY WINDOW REPAINT... This also =
+sounds=20
+horrible, but it works more or less well. Here is the code (C++Builder=20
+3):</FONT></P>
+<P><CODE>--------------- [cut] -----------<BR>On Goblin start-up we =
+generate=20
+arrays of rects for all images:</CODE></P>
+<P><CODE>...........</CODE></P>
+<P><CODE>// Generating rects arrays for all sprites.<BR>// Sprites are =
+stored in=20
+a 1 big image (iGoblins) - 9 pictures width, 4 pictures height<BR>// =
+isGetTop(),=20
+isGetLeft()&nbsp; - are just functions, which returns correct =
+coordinates in the=20
+big image</CODE></P>
+<P><CODE>for ( int i =3D 0; i &lt; iSprites; i++ )<BR>{<BR><BR>&nbsp;=20
+CreateRectListV(iGoblins-&gt;Canvas,<BR>&nbsp;&nbsp;&nbsp; &amp;Rect(=20
+isGetLeft(i),&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=20
+// GWidth * ( i % 10 ) + GAddX,<BR>&nbsp;&nbsp;&nbsp;=20
+isGetTop(i),&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&=
+nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&n=
+bsp;&nbsp;=20
+// GHeight * ( i / 10 ) + GAddY,<BR>&nbsp;&nbsp;&nbsp; isGetLeft(i) +=20
+GWidth-2,&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbs=
+p;&nbsp;=20
+//GWidth * ( ( i % 10 ) + 1 ) - 1 + GAddX,<BR>&nbsp;&nbsp;&nbsp; =
+isGetTop(i) +=20
+GHeight-2&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbs=
+p;&nbsp;&nbsp;=20
+//GHeight * ( ( i / 10 ) + 1 ) +=20
+GAddY<BR>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbs=
+p; ),i=20
+);<BR>}<BR><BR>PackRectListV();&nbsp;&nbsp; // making big rects from =
+many small=20
+rects where possible.&nbsp;<BR></CODE></P>
+<P><CODE>...........<BR>Then, we can use this code to draw current =
+Goblin=20
+sprite:</CODE></P>
+<P><CODE>rgn =3D CreateRgnFormRects( iSprite );&nbsp; // Now!!! We are =
+generating=20
+a Region!<BR><BR>if ( rgn !=3D 0 ) SetWindowRgn( Handle, rgn, true ); // =
+Handle is=20
+a=20
+Goblin<BR>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nb=
+sp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=20
+// main window handle<BR><BR>// Drawing the current sprite image to the=20
+window</CODE></P>
+<P><CODE>frmGoblin-&gt;Canvas-&gt;CopyRect( Rect(0, 0, GWidth,=20
+GHeight),<BR>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=
+&nbsp;iGoblins-&gt;Canvas,<BR>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&=
+nbsp;&nbsp;&nbsp;&nbsp;=20
+Rect( isGetLeft(Sprite), // X * GWidth +=20
+GAddX,<BR>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nb=
+sp;=20
+isGetTop(Sprite),//Y * GHeight +=20
+GAddY,<BR>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nb=
+sp;=20
+isGetLeft(Sprite)+GWidth,//( X + 1 ) * GWidth +=20
+GAddX,<BR>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nb=
+sp;=20
+isGetTop(Sprite)+GHeight//( Y + 1 ) * GHeight +=20
+GAddY<BR>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbs=
+p;=20
+));<BR></CODE><CODE>--------------- [cut] -----------<BR></CODE></P>
+<P><FONT face=3DTahoma size=3D2>Seems that's all.&nbsp; Hope I described =
+this,=20
+hmmm..., not so bad...</FONT><FONT face=3DTahoma size=3D2><BR>Anyway - =
+things are=20
+not so bad! :))) I wrote a a simple example, based on smallGoblin =
+drawing=20
+engine. Take it <A=20
+href=3D"http://goblin.prestosite.net/smtutor/simplegoblin.zip">here =
+(exe+src)=20
+</FONT><IMG height=3D45 =
+src=3D"http://goblin.prestosite.net/smtutor/running.gif"=20
+width=3D35 border=3D0></A> and enjoy!</P><FONT face=3DTahoma =
+size=3D2></FONT>
+<P><FONT face=3DTahoma size=3D2>Try the fortune on <A=20
+href=3D"http://msdn.microsoft.com/">http://msdn.microsoft.com/</A>&nbsp; =
+- here=20
+may be some explanations of regions conception from the creators.=20
+:)&nbsp;</FONT></P>
+<P><FONT face=3DTahoma size=3D2>By the way! There is a nice Screen Mate =
+Wind-Up Bird=20
+<IMG height=3D47 src=3D"http://goblin.prestosite.net/smtutor/wubird.gif" =
+width=3D37=20
+border=3D0> with Visual Basic src at <A=20
+href=3D"http://www.cwinapp.com/">http://www.cwinapp.com/</A> (look in =
+Fun Stuff=20
+section). This Mate also uses SetWindowRgn()...</FONT></P>
+<P align=3Dcenter><FONT face=3DTahoma size=3D3><B><A name=3DWay3></A>3. =
+DirectDraw=20
+Overlays</B></FONT></P>
+<P><FONT face=3DTahoma size=3D2>There is an example from DirectX SDK (I =
+saw it in=20
+DirectX 7.0 SDK):&nbsp;&nbsp;<BR><A=20
+href=3D"http://goblin.prestosite.net/smtutor/mosquito.ZIP">Mosquito =
+DirectDraw=20
+Sample</A> <IMG height=3D50=20
+src=3D"http://goblin.prestosite.net/smtutor/mosquit1.gif" width=3D80=20
+border=3D0><BR>This seems to be very good solution for Screen Mate =
+development.=20
+The only limitation is DirectX, that must be installed on the system. As =
+far as=20
+I understood, it uses features of DirectX 5.&nbsp;&nbsp;&nbsp; So - this =
+will=20
+not work on pure Windows95 and Windows NT 4 (without DirectX manually=20
+installed). But this may work without any problems on Windows 98 &amp; =
+Windows=20
+2000.</FONT></P>
+<P align=3Dcenter><B><A name=3DWay4><FONT face=3DTahoma =
+size=3D3></FONT></A><FONT=20
+face=3DTahoma size=3D3>4. Microsoft Agent</FONT></B></P>
+<P><FONT face=3DTahoma size=3D2>We - those, who are making screen mates, =
+are not=20
+alone in the galaxy.&nbsp;<IMG height=3D58=20
+src=3D"http://goblin.prestosite.net/smtutor/r2d2.gif" width=3D47 =
+border=3D0> Bill=20
+Gates &amp; his crew made something in this sphere too.&nbsp; They =
+called the=20
+creature "Microsoft Agent". We can see it, for example, in MS Office2000 =
+as=20
+"Office Assistants".&nbsp; So - what is it?</FONT></P>
+<P><FONT face=3DTahoma size=3D2>Microsoft Agent is an ActiveX =
+component...&nbsp;=20
+What does it means? Hmmm...</FONT></P>
+<P><FONT face=3DTahoma size=3D2>It's necessary to install this =
+component. (take=20
+executables from Microsoft &amp; run them). Then we may have: 1) =
+Microsoft Agent=20
+ActiveX engine 2) TrueVoice speak engine 3) Tool for editing *.asc files =
+
+(sprites for the character).&nbsp; Now we can take out favorite =
+programming=20
+language, import "Microsoft Agent" ActiveX library &amp; enjoy using=20
+it.&nbsp;</FONT></P>
+<P><FONT face=3DTahoma size=3D2>Here is an sample HTML page, which =
+controlls MS=20
+Agent with VBScript (it's possible to write MS Agent controllers as HTML =
+of WSH=20
+(Windows Scripting Host) files, using JScript or VBScript). The =
+following page=20
+is from MS INet SDK. If you have MS Agent installed, you may see and =
+hear=20
+smth.:</FONT></P>
+<P><A =
+href=3D"http://goblin.prestosite.net/smtutor/Listing4_19.htm"><FONT=20
+face=3DTahoma size=3D2>Microsoft Agent Sample Page</FONT></A><FONT =
+face=3DTahoma=20
+size=3D2>&nbsp;&nbsp;&nbsp;&nbsp;</FONT></P>
+<P align=3Dcenter><B><FONT face=3DTahoma size=3D3><A=20
+name=3DConclusions></A>Conclusions</FONT></B></P>
+<TABLE cellSpacing=3D0 width=3D"100%" border=3D1>
+  <TBODY>
+  <TR>
+    <TD width=3D"20%" bgColor=3D#008080><B><FONT face=3DTahoma =
+color=3D#ffff00=20
+      size=3D2>Technology</FONT></B></TD>
+    <TD width=3D"20%" bgColor=3D#008080><B><FONT face=3DTahoma =
+color=3D#ffff00=20
+      size=3D2>Speed</FONT></B></TD>
+    <TD width=3D"20%" bgColor=3D#008080><B><FONT face=3DTahoma =
+color=3D#ffff00=20
+      size=3D2>Program Size</FONT></B></TD>
+    <TD width=3D"20%" bgColor=3D#008080><B><FONT face=3DTahoma =
+color=3D#ffff00=20
+      size=3D2>Run at</FONT></B></TD>
+    <TD width=3D"20%" bgColor=3D#008080><FONT face=3DTahoma =
+color=3D#ffff00=20
+      size=3D2><B>Examples</B></FONT></TD>
+    <TD width=3D"20%" bgColor=3D#008080><B><FONT face=3DTahoma =
+color=3D#ffff00=20
+      size=3D2>Mouse Hit Transparency</FONT></B></TD></TR>
+  <TR>
+    <TD width=3D"20%" bgColor=3D#c0c0c0><B><FONT face=3DTahoma =
+size=3D2>Redrawing=20
+      background manually&nbsp;</FONT></B></TD>
+    <TD width=3D"20%"><FONT face=3DTahoma size=3D2>normal</FONT></TD>
+    <TD width=3D"20%"><FONT face=3DTahoma size=3D2>small</FONT></TD>
+    <TD width=3D"20%"><FONT face=3DTahoma size=3D2>Win 3.x, 9x, NT, =
+2000</FONT></TD>
+    <TD width=3D"20%"><FONT face=3DTahoma size=3D2>Scam Poo, Message =
+Mates</FONT></TD>
+    <TD width=3D"20%"><FONT face=3DTahoma size=3D2>No</FONT></TD></TR>
+  <TR>
+    <TD width=3D"20%" bgColor=3D#c0c0c0><B><FONT face=3DTahoma =
+size=3D2>Win32=20
+      Regions</FONT></B></TD>
+    <TD width=3D"20%"><FONT face=3DTahoma =
+size=3D2>slow-normal</FONT></TD>
+    <TD width=3D"20%"><FONT face=3DTahoma size=3D2>small</FONT></TD>
+    <TD width=3D"20%"><FONT face=3DTahoma size=3D2>Win 9x, NT, =
+2000</FONT></TD>
+    <TD width=3D"20%"><FONT face=3DTahoma size=3D2>:) smallGoblin, =
+Wind-Up=20
+      Bird</FONT></TD>
+    <TD width=3D"20%"><FONT face=3DTahoma size=3D2>Yes</FONT></TD></TR>
+  <TR>
+    <TD width=3D"20%" bgColor=3D#c0c0c0><B><FONT face=3DTahoma =
+size=3D2>DirectDraw=20
+      Overlays</FONT></B></TD>
+    <TD width=3D"20%"><FONT face=3DTahoma size=3D2>fast</FONT></TD>
+    <TD width=3D"20%"><FONT face=3DTahoma size=3D2>hmmm... seems =
+small</FONT></TD>
+    <TD width=3D"20%"><FONT face=3DTahoma size=3D2>Win98, 2000 or other, =
+if DirectX=20
+      installed</FONT></TD>
+    <TD width=3D"20%"><FONT face=3DTahoma size=3D2>Mosquito</FONT></TD>
+    <TD width=3D"20%"><FONT face=3DTahoma size=3D2>No</FONT></TD></TR>
+  <TR>
+    <TD width=3D"20%" bgColor=3D#c0c0c0><B><FONT face=3DTahoma =
+size=3D2>Microsoft=20
+      Agent</FONT></B></TD>
+    <TD width=3D"20%"><FONT face=3DTahoma size=3D2>fast</FONT></TD>
+    <TD width=3D"20%"><FONT face=3DTahoma size=3D2>big (asc file is big; =
+code may be=20
+      small)</FONT></TD>
+    <TD width=3D"20%"><FONT face=3DTahoma size=3D2>Win9x, NT, 2000 + MS =
+Agent=20
+      ActiveX component installed</FONT></TD>
+    <TD width=3D"20%"><FONT face=3DTahoma size=3D2>MS Office =
+Assistants</FONT></TD>
+    <TD width=3D"20%"><FONT face=3DTahoma =
+size=3D2>Yes</FONT></TD></TR></TBODY></TABLE>
+<P><FONT face=3DTahoma size=3D2><BR><BR>You can contact me at: <A=20
+href=3D"mailto:smallgoblin@yahoo.com">smallgoblin@yahoo.com<BR></A>Homepa=
+ge=20
+is:&nbsp; <A=20
+href=3D"http://smallgoblin.narod.ru/">http://smallgoblin.narod.ru<BR><BR>=
+</A>12.12.2000=20
+(c) Kane+<BR><FONT face=3DTahoma size=3D2>14.12.2000 v.1.2</FONT> =
+</FONT></P>
+<P align=3Dcenter><FONT face=3DTahoma><A=20
+href=3D"http://goblin.prestosite.net/smtutor/transparent.htm#PageTop">Top=
+<BR></A></FONT></P>
+<P align=3Dcenter>&nbsp;</P></BODY></HTML>
+
+------=_NextPart_000_0000_01C65191.D95A9D60
+Content-Type: image/gif
+Content-Transfer-Encoding: base64
+Content-Location: http://goblin.prestosite.net/smtutor/scampoo.gif
+
+R0lGODlhKAAoAPcAAAAAAHAAcLAAsKCfYP+QT/94/8C/f/+ocM/Pz//HoP/fwP/3kP/48P//3///
+/wAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
+AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
+AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
+AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
+AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
+AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
+AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
+AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
+AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
+AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
+AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
+AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
+AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAACH/C05FVFNDQVBFMi4wAwHo
+AwAh+QQJLAEMACwAAAAAKAAoAAcI/AAZCBxIsKDBgwgTKlzIsCFBABAjRnTocCJCixQNQhzYoKPH
+jwI3ZhwIQODHBShTLvjYgEHJhhIBnFRJU2VHlxIvFhBQAGJHlAaCAhW6IKgBlB0h7uypMcDSnQCA
+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
+ZvV6oG3EtgfeuuUqNerUkwIABCBboG/EBIAJtE1gIMEBwQkE2yW6NyzNk2EFNMYKuLLly4bjqt0r
+IG/ZyGR7AsBMunJc0QE604yct7Tr14BZr95LNvboyhMv58YNwC3t2Z1rEyBw+/FJ3ASLD4+bWvJq
+1RIBH0jwOOLx6tXhno6omkFYsvvQi3tf7Z269/He3XLPm7q66vZezU8sv5pibwBenXfHS7b9gtEA
+IIAeR+YNeF9+/eVlFm2q/RcbAhAS+GCEvcWVn2SNJddZXk7dRl10CoT44V+H4XehgkBF5BRYlhUm
+IgIKVFZYXEpddFBWL3lYWoyB0ajVQjiCNR1smfnIlHEI4cfUf0PC1hZxS3oF5AIDdDjYa4KVmJSU
+UzLFVpOXaQelU1wC2dSXYCYmJnFnIpkQAFU2VaFobw1nogEDDODmm20qRkAAf/4JwHBs5qlnRXDi
+yRVxhBI6KJtNHYoonHFG1KidKuKp554NRZSnV48OR5ahm6aUIqWhEmeojSumnoQpnZYS12pyhjFq
+3KCjlTirWbXiahZxve56XInWQZarrML2dON8CwUEACH+a0ZJTEUgSURFTlRJVFkNCkNyZWF0ZWQg
+b3IgbW9kaWZpZWQgYnkNCmFuIHVuaWRlbnRpZmllZCB1c2VyIG9mIGFuIHVucmVnaXN0ZXJlZCBj
+b3B5IG9mIEdJRiBDb25zdHJ1Y3Rpb24gU2V0ACH+6lVOUkVHSVNURVJFRCBTSEFSRVdBUkUNCg0K
+QXNzZW1ibGVkIHdpdGggR0lGIENvbnN0cnVjdGlvbiBTZXQ6DQoNCkFsY2hlbXkgTWluZHdvcmtz
+IEluYy4NCkJveCA1MDANCkJlZXRvbiwgT04NCkwwRyAxQTANCkNBTkFEQS4NCg0KaHR0cDovL3d3
+dy5taW5kd29ya3Nob3AuY29tDQoNClRoaXMgY29tbWVudCB3aWxsIG5vdCBhcHBlYXIgaW4gZmls
+ZXMgY3JlYXRlZCB3aXRoIGEgcmVnaXN0ZXJlZCB2ZXJzaW9uLgAh/wtHSUZDT05uYjEuMAIGAA4K
+AAIAAwAAAAAAAAAAAApDbGlwYm9hcmQADgwAAgAFAAAAAAAAAAAADFNIRUVQOWEuZ2lmAA4KAAIA
+BwAAAAAAAAAAAApDbGlwYm9hcmQADgwAAgAJAAAAAAAAAAAADFNIRUVQOWIuZ2lmAA4KAAIACwAA
+AAAAAAAAAApDbGlwYm9hcmQADgwAAgANAAAAAAAAAAAADHNoZWVwOWMuZ2lmAAA7
+
+------=_NextPart_000_0000_01C65191.D95A9D60
+Content-Type: image/gif
+Content-Transfer-Encoding: base64
+Content-Location: http://goblin.prestosite.net/images/gobguit1.gif
+
+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
+
+------=_NextPart_000_0000_01C65191.D95A9D60
+Content-Type: image/gif
+Content-Transfer-Encoding: base64
+Content-Location: http://goblin.prestosite.net/images/musicon.gif
+
+R0lGODlhMgApANQfAAICArePjo8kH49HQD80N8YaEmoNB9RhQv7GIrEtHyckK0sjIdAvJv6eYY5p
+a3IhG97H7lk6hty3uP7+/uB3Sm1DNcSko4JatotmqqlOR3dVl/BUTKyC3PIvJv4FBAAAACH/C05F
+VFNDQVBFMi4wAwEAAAAh+QQJDwAfACwAAAAAMgApAAAF/+AnjmRpnmiqrmzrvooYy/Rrl3P+6Xc/
+xgrgLsjzsYJDolJptC2fyGbrCYEoqtGdVJULQiZgsJW4hYEVE3S6PM19wxOrbMY2KRrBQwIiOfAF
+B0F4dScKFA0JDXoHigmMiRR0hCQKjA0NFIkJh5eBkyh3d5ibl6GfoHiXqqWDp4V4T62ur6ulszhB
+FxFQu2SuChwYERfCEQcMBxHKHLoXHAoCAxULbMC6CsMcygTcBLsABBrPBA/lBFvYuzIRDhjdGwNB
+C9jOQQ8VD9RNTDvD7hsdOjBIkIHBgyDKguB7sI8RHXrPBgQcWECAAEGBHggop8/JAAeyhiQEMKAA
+sgQJDuEqCmJxY8cUCipEODcEgKQkCmwWPDDhQIE7gRQMGFCuHItuQTQ4cBBAggQLAQIwnRpVgtQJ
+ARR4SBDE0YCND2iqIBCEG9SmECxAaBrAggO3FuJKXetBqwICyBbmO9otQV0oUDJ02GDhwAK/QhMQ
+BfsSJhKUKCpUACCCZEA9Av4mKJDAIkdCBxAAkRiQ80EFBjZ3BntTigIEgQhs8DCRAQOXGj0bnfQ6
+p+CBCwBUQIm7aOMyoXLyIzBg9UYBx5GT4Scit8tTXp7t4CDnFqUnOFt/AgwE/K8lZJGQ977CPPtJ
+IQAAIfkECQ8AHwAsBAAAACYAKAAABf/gJ45kaZrKqarp17auCK/0+MpxPtdrqviu343H8gmPSGIN
+yfwpe0gIRCF14p6k1w8y6XanQixN0SWTJzux7cX1Tqay9FPR+B0SEMkhLzj86mo2FA0JDXcHhn2E
+DRRyc4gNjIUJg5F+gSV0dIwClZqYmXWQkYafoDZ1TaanMqkJHgl/jmI/EZukkQoRF1aBChzAtj8E
+xAQREcAcmL8Yu80RBwwHx8gXuxwKAgMVC0S/1roXHMfFxgoABBrYBA/tBEvHLxEOGMUbBD8Luhgc
++A8VD7pBsRKu3oYOHRgkyMDgQS1hAB/0QAQjHLYBCBUWECCAQCkFDwS0E5hlgANAa+LZARjAQFqC
+BMQ+chSpr0KEd0EA7Diik+GBCQcy0PGjYMCAdu6I/UjgwEEACRIsBAjgtOpUCVSBDv2R4cAAkQ+U
+KiDw6ioECxCeBrDggK2Ft1SnePDww4G0iAHLvVLVJEOHDRboGlDg4OVRsN3CvFRRoQIAESsRHliw
+9+VLjiOfHEDgAyPCAg/oEjBgGbPDOQj8ENjgIWNLmiFNS8SigDMAvwoXAKhwOSDSgLRS6QzzgcCA
+BDNDkpwT5giJ2DR9QcDmggMcVlmcJ8HeJMh2X0fwOeGrhslA4iVCAAAh/ntUaGlzIGFuaW1hdGVk
+IEdJRiBmaWxlIHdhcyBjb25zdHJ1Y3RlZCB1c2luZyBVbGVhZCBHSUYgQW5pbWF0b3IsIHZpc2l0
+IHVzIGF0IGh0dHA6Ly93d3cudWxlYWQuY29tIHRvIGZpbmQgb3V0IG1vcmUuAVVTU1BDTVQAOw==
+
+------=_NextPart_000_0000_01C65191.D95A9D60
+Content-Type: image/gif
+Content-Transfer-Encoding: base64
+Content-Location: http://goblin.prestosite.net/smtutor/running.gif
+
+R0lGODdhIwAtAPMPACAgIM3NzVoYAKQpAP/FINViOf+cYv///6yD3uZ7QVo5izkgYv8AAN7F9oNa
+tAAAACwAAAAAIwAtAAAE/vDISau9OOvNu/9gKIIAIJkHOmJlYKrrqZYtHKcoTd+T7pe3XEkBSBwa
+AGRwWCpUlDyaMZWCrmoAJ8U6AhhKiYSzUUDaQsVvwiAusAuJXRf+Ndjv9vDZk/bixXJXa35veyJg
+Xz48KQwDaWxxiwAOCo0/kghIjQOcDIYkDggumwOeUQiTopUMDERBDQ4ACqEuP4F8CLELqWsEd6Ws
+nyy6RLYAnA6mJLILDqG5rjgAyiQC1tYK1jbCGUUE3+DfQEEFvgXncG4E3BreiT697Cxue1nrh1kG
+BfVfFOPdftYZ8jIj2oUm79op2JXCYIUSCHbJAyCKSb0FGLm0w7iQ4cEFHQvlnejokQXGfxwAnEy5
+0OEGlO10LGJxa6ZNCREAADs=
+
+------=_NextPart_000_0000_01C65191.D95A9D60
+Content-Type: image/gif
+Content-Transfer-Encoding: base64
+Content-Location: http://goblin.prestosite.net/smtutor/wubird.gif
+
+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
+
+------=_NextPart_000_0000_01C65191.D95A9D60
+Content-Type: image/gif
+Content-Transfer-Encoding: base64
+Content-Location: http://goblin.prestosite.net/smtutor/mosquit1.gif
+
+R0lGODlhUAAyAPcAAAAAAGJiYouLi2pqAIODg2JiAHNzANXV1Xt7AM3NzZycnIuLALS0tFpaAMXF
+xZycAFpaWoODALS0AKysrJSUAKysAHNzc8XFAKSkAAAQAL29ANXVAJSUlM3NAN7eAL29vWpqaqSk
+pAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
+AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
+AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
+AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
+AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
+AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
+AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
+AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
+AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
+AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
+AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
+AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAACH5BAEAAAAALAAAAABQADIA
+AAj/AAEIHEiwoMGDCBMqXMiwocOHECNKnEixosWGGzZc3MhxYMaPIDV2HPkwpMmMBxeQXAngpEuR
+AyOwJPny5cAFD2Z2rGkTQASVOjnydAlggcygG4e6DDEBqVClHz8kmOqAgQKBDBw4+MDAackOSh0k
+OEA2wVYOYg9Q/UDAK8ahWQ9kmDvXQYixdDM4aOqW4VCpCfLqnWBBcNW+DsG6zBo474cQIAzzRexX
+cUgFWfPu5QCh8dwPHCg/BGs5YwgGH7Z+mMAhQIcKqbkqgCA6okkBChSE4EAAwoMOrxXwrm0Rg4YL
+DRpASN4AAQbgGIhXfCDhAvCMHS5oeNAAQAXgOaVH/6xw/Drw7BIoDJQAXL14hxLKk96QXQMGnOvp
+A32/0HoHDB5cQN8FF0iAAQISDJBfB/wxZJ2AEtBXXwUPFIBBBQQ9sMEFDSqkmIbAEWggBd1VgKFH
+DHaIEH0FSFifgUd5Fx4AGmxwoooD1YgcfQNqIAGFCMQkAUH04TgQWBUkR8EC2Wk3YkEpClQBTCpa
+R6KSCxhlgAYYJncTh0RqYGQHEnjZQAQIFODlQBgcJcGQBEXgAY70xZihnQ9EBwCYUHYYIQVRFkSB
+ewLxyWdBVBJ3wYWvJUQojQMdSlCgtW0oJqUZzqiBAQPdaNCMlNGHwQWcSkqQmJE6ZKpXBQJgHI2g
+nlNakKZGVgBnB5xiKuV+e05qJKqQ9nqQnp0S1F2VQe6pIADHFgSnkQg9MCOYujabKrQCActstthC
+dKiu3UZkraDhHmQnn8SWm5C26rbr7rvwxgtRQAA7
+
+------=_NextPart_000_0000_01C65191.D95A9D60
+Content-Type: image/gif
+Content-Transfer-Encoding: base64
+Content-Location: http://goblin.prestosite.net/smtutor/r2d2.gif
+
+R0lGODlhLwA6APcAAAQCBFxYhFRCPK6qrAQCRGRfZIx/hLSu1AQCJFRJZJSQrNzW1CQiJCwoRHxk
+ZJyXnMzBxExBVHRyhDw2aBwWJKyqvNTK1GRfdIyHnDw2RAQCNExIdAQCFNzW7HRynJyOjGRUXMC6
+vFRGRKShrGxqdIyKjCwmNISChNTO7FRPVEQ6VBwaRMzK1Ozq7GxmmFRSZIR2bKykpHx3lKyqtBQM
+LNTO5BQTNBcSFGxmhHRqbCwmVFxZdKykvBwcVBQHDGxnbIyBlAQCLMzKzLSyzOTS3DQzNExBTKSe
+nIR+hNTQ1GRffERARMS+zFxJTGxqfFxYXMzH5GRaZAQCDGRhbIyGjOTg5DwyShwTNLy2vJSOnAQC
+PLy7xLSmrPz2/Hx1fLyxtJSSvDQqLFxKVERCeFRRdBQOFOTl7ExKTKSetJSOlFROXEQ/VFRSbNTQ
+3GRfhEw9RMS+5AwKJJyWsCwsLCwqTIRudKSapFJKVHRyjAQDHIR+nBwaTMzJ3BQSHGxmjCQeXNzK
+zMS+1xQSRIx+fLyspNTS/NzW5ISClERAbDQyWCQeNFRObIyKtIJqbLSuxJyRlDQqPKSexDw2PCwm
+LDw2THx2pNTS9Dw5XOzq9FxafJSOpBwaPAwKRJSGhLy21FxOZNrW3MzEzHx6hCQeJLSyvGxmdIyK
+pAwKNOTe7GpaXKymrHRydDQuNISKjCQiRIR+lLSytBQSPHRuhCQiVGxmfHRyfAwKDAwKPMTCxIB6
+fExOTKymtFFCRFRKXHx6jAwKHBwaHHRujAwGBGxeZJSChAwFJKSYnHx2hCQaJGxedEQ6RAwCNExK
+fHx2nKSKjKyirHRsdJSLjDQqNNzS7FxSVCQcRFxTZIRydLSlpIR6lLSutNzS5HRqhGRadCQeVAwD
+LNTMzLy2zFRCTKSfpIR+jNzO1GxifEQ/THRsfGRWbAwFDGxhbJSGjOzi5LyyxJySnMS9xFROfOzl
+7FRJTFxQXERCXFxUbNzS3GRejDQtTAwGHISCpBwWHEQ6TPTt9JySpCH5BAEAAAAALAAAAAAvADoA
+QAj+AAEIHEiwoMGBfQ4qXMgQAL83Ru6osZfOHDpyWUZUGJLPyqJY37rdgdSwJABlESjpy5MnSBAd
+E8YEcKOk26JELoMgyLdoTRJ5VeaYFHjmhiQvSZLc0/YDSZoHXLSFGxIICp82NdqQ2lEMQQNNx0DB
+kjRUYBkGDB60aXVmFZJoTwdowwIPggVwod4ZM9AmCYQBbR6UHchgEjwhSecZSdXIgTNiXqBBHfAl
+yTMfIZKGImGnFouyZ0Kf0WVmXK4qST4PHfWA6Z0UJFgNBsAA1LgpYWbrNkkBQRANY7QI1+KthxYN
+NPTtVihFUYM8voNUu0RGCR4eXJ7FuICHERg3UDz+XdCtbtIkSWaStMBEZVWJNONUYfnyhRAEQIDK
+ESGybRufPBcssVQJZU2izg1PJAFKGyn84EUJWYwzACwh4BKKEOBY8A4WJYCShBAPJDHKbuqMskoS
+49zhFhVP7QILFrgwAU4SIXABzwJJMYHFh7NJkoYqIQjBAopfAHNGLlM8kYI1w+SAxDi4PDDJHAzg
+uAomuUiSxWqsjILLGS2YYUYLZ0wCzHJoGiSFFJRc4ZsNDfyyZpoMLWFEL/ZkkgkZG8QTjxt+VFKJ
+B268cI4PdA4kjTLKrKGGNRdcpMkuWDDBBwQCEJJMMcXsoIIUdJbRjyK+aTAcAQRosc8UqMBzgR/+
+GnQhBxCfZAAPOEKVdcMq48AihCiSrPNDFGqo8Yk93SiBgwzZAAEEOV6k0sQb7MCTixkhjDOUOvPc
+M8cXsLTTThKrnPBUDCPog8A36wbxzTfCFWIJFBgUAIo2BZRVxlkFLNDGPQ3mEs0D4+xig6ka2CNH
+IAocYMk0bQiRBoPqDLbvKAW04W8KTr4nIYXwXJhEKIa0IUlfEIwDypnkjXJCEmm0hQSLD6iiTQgh
+z/hFDG8kyELKPM42yRSskJDEFmfMk0odjXyADRZ0QYBYUjgmZWEST+hmHi5CIDbKHbnkMsgHuWTx
+DDsxYFMZYrCkkRQoEycxWBGh5QILvuMMWRL+BWWqkss8ubQzzjktlHRGEQwMkAKYLYQZdKIlmZDC
+HWPKYzkWd1QMOZ0cKIECB6Bu3lAxNrg0his97OGNBrfEArroA6mjDCS+VXOKqcItg4gGy9iwBgOw
+FxHRsTuYw00w2ZiiQCTumopIL29sLglE4nwCaSm+ZIEGKfAwkUYdhNhTTAKGJrpmBpDUk8AiF3CD
+0fZMhFIOPVbY8G4wDShC5yQmkPob7sLRAAZE0YVdoEMPpyhgFoCgBgqkaQlSyIMrLpGIP3BiOEGQ
+QS+m4QgluGADLgiAN4qRD1QIoQrLGUUGlNGPO63BCtWggbsQUIxvVEMFbDCHLNYBAjFEAQn+LcDC
+loZiHlKEwBBVGEEBoEGFdxTsEW/ghTjE0YR5NEEEvCAGBIjQhmxMYQHaSMNQgCGJEEzCDLBoQTu6
+AA1zjSMq4ThAIFAQCE9EohkTWMYmELAGR6SgDV/wQlmgAQ9WuK0KS3HSubSRBQzQ4gIS0MMuaoAC
+FBQCDnSwBgnulQJ93cAEP3jbE35wgoEdYRd0EIQWXEEGCbwAATSMBRpYQAUqJOEBNygQMDC2oAU0
+aGYEU4UjqMKCvrRhG8fsC4hAsYTZ3GBfT1gAKHxJgpnBx2Z0CYUFLBCKNljABDhigspGNBgp3GAU
+YVDZCVKwojQcgQsvih9ibmWMNHhInAv+YFk5hTGKErQhZm1sRVxeZCEWgOMLqvCBGHI0gKToRhhS
+GEUuAnMGaCDhPQ+YUKW4ZoEB1PJlfmmo3GZzBn7+wDZJS8U1iPEIeMIoFKEAR18WlARwQCAzW9Da
+JETWhnncAQSNaBo25gIBmOpMHTsCBy7gsYVxaGsw5jnMjFKQAhDkwAEfIAY6oPEIbMQAC+U4wiNC
+kZSkTAIT/BhMLkowCa7NaADIkMQk5gENY8gHHiHAAiwe4IWnzGFIrRiTPzpZliWIYgBZYMEDQEqQ
+SSwhBUUYyCTKNImkFCAJ/mjBAAhUEiOF5g4wC4E2HFoSW0hCCFQowBMegIUntAAJDTlGwzlS8IQ1
+6KIFbRhAC0g7lF39IFe8KQLGYjamEJxDCAaA3ULQ+YAzyKNxd3gANFKgOeUaZLItsFwVBvCD3Fh3
+IcD7rkACAgA7
+
+------=_NextPart_000_0000_01C65191.D95A9D60--

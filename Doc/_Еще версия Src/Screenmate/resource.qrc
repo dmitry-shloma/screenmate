@@ -1,0 +1,5 @@
+<RCC>
+    <qresource prefix="/characters">
+        <file>bat.png</file>
+    </qresource>
+</RCC>

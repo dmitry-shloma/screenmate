@@ -9,7 +9,8 @@
 #include <QTextStream>
 #include <QDesktopWidget>
 #include <qmath.h>
-#include <QSystemTrayIcon>
+#include <QAction>
+#include <QDebug>
 
 ScreenmateWidget::ScreenmateWidget(QWidget *parent) :
     QWidget(parent),
@@ -25,7 +26,7 @@ ScreenmateWidget::ScreenmateWidget(QWidget *parent) :
     readSettings(fileName);
     initSprites(5, true);
 
-    if (!isTraining_) {
+    if (!isTrainingMode_) {
         onTimerMove();
         timerMove_ = new QTimer(this);
         connect(timerMove_, SIGNAL(timeout()), this, SLOT(onTimerMove()));
@@ -34,6 +35,9 @@ ScreenmateWidget::ScreenmateWidget(QWidget *parent) :
 
     timerEvent(0);
     startTimer(drawSpeed_);
+
+    QMenu *contextMenu = createTrayIconMenu();
+    createTrayIcon(contextMenu);
 }
 
 void ScreenmateWidget::paintEvent(QPaintEvent* event)
@@ -46,11 +50,7 @@ void ScreenmateWidget::paintEvent(QPaintEvent* event)
 
 void ScreenmateWidget::mousePressEvent(QMouseEvent *event)
 {
-    if (event->button() == Qt::RightButton) {
-        qApp->exit();
-    }
-
-    if (!isTraining_) {
+    if (!isTrainingMode_) {
         return;
     }
 
@@ -62,7 +62,7 @@ void ScreenmateWidget::mousePressEvent(QMouseEvent *event)
 
 void ScreenmateWidget::mouseMoveEvent(QMouseEvent *event)
 {
-    if (!isTraining_) {
+    if (!isTrainingMode_) {
         return;
     }
 
@@ -122,10 +122,48 @@ void ScreenmateWidget::onTimerMove()
 
 }
 
+void ScreenmateWidget::onTrayIconActivated(QSystemTrayIcon::ActivationReason reason)
+{
+    switch (reason) {
+    case QSystemTrayIcon::Context:
+        break;
+    case QSystemTrayIcon::DoubleClick:
+        QSystemTrayIcon::MessageIcon icon = QSystemTrayIcon::MessageIcon(0);
+        trayIcon_->showMessage("title", "msg", icon, 1000);
+        break;
+    }
+}
+
+void ScreenmateWidget::onGarlandAct()
+{
+    qDebug() << Q_FUNC_INFO;
+
+}
+
+void ScreenmateWidget::onStarsAct()
+{
+    qDebug() << Q_FUNC_INFO;
+}
+
+void ScreenmateWidget::onAnimationAct()
+{
+    qDebug() << Q_FUNC_INFO;
+}
+
+void ScreenmateWidget::onTransparentActSelected(int level)
+{
+    qDebug() << level;
+}
+
+void ScreenmateWidget::onExitAct()
+{
+    qApp->exit();
+}
+
 void ScreenmateWidget::readSettings(const QString &filename)
 {
     QSettings settings(filename, QSettings::IniFormat);
-    isTraining_ = settings.value("Training/isTraining", true).toBool();
+    isTrainingMode_ = settings.value("General/isTrainingMode", true).toBool();
 
     moveSpeed_ = settings.value("Sprite/moveSpeed", 15).toInt();
     drawSpeed_ = settings.value("Sprite/drawSpeed", 150).toInt();
@@ -200,7 +238,7 @@ void ScreenmateWidget::initSprites(
         }
     }
 
-    int spriteWidth = pixmap.width() / spriteCount;
+    int spriteWidth = pixmap.width() / 5;
     int spriteHeigth = pixmap.height();
 
     for (int i = 0; i < pixmap.width(); i += spriteWidth) {
@@ -212,4 +250,49 @@ void ScreenmateWidget::initSprites(
         QBitmap mirroredMask = mirroredSprite.createHeuristicMask();
         mirroredSprites_.append(QPair<QPixmap, QBitmap>(mirroredSprite, mirroredMask));
     }
+}
+
+void ScreenmateWidget::createTrayIcon(QMenu *contextMenu)
+{
+    trayIcon_ = new QSystemTrayIcon(this);
+    connect(trayIcon_, SIGNAL(activated(QSystemTrayIcon::ActivationReason)),
+            SLOT(onTrayIconActivated(QSystemTrayIcon::ActivationReason)));
+    QIcon icon = QIcon::fromTheme("edit-undo");
+    trayIcon_->setIcon(icon);
+    trayIcon_->setToolTip(QApplication::applicationName());
+    trayIcon_->setContextMenu(contextMenu);
+    trayIcon_->setVisible(true);
+}
+
+QMenu *ScreenmateWidget::createTrayIconMenu()
+{
+    QMenu *optionsMenu = new QMenu(tr("&Options"), this);
+    optionsMenu->addAction("&Garland", this, SLOT(onGarlandAct()));
+    optionsMenu->addAction("&Stars", this, SLOT(onStarsAct()));
+    optionsMenu->addAction("&Animation", this, SLOT(onAnimationAct()));
+
+    Q_FOREACH(QAction *action, optionsMenu->actions()) {
+        action->setCheckable(true);
+    }
+
+    signalMapper_ = new QSignalMapper(this);
+    QMenu *transparentMenu = new QMenu(tr("&Transparent"), this);
+    for (int i = 0; i <= 100; i+=10) {
+        QAction *transparentAct = new QAction(QString("%0%").arg(i), this);
+        transparentMenu->addAction(transparentAct);
+        connect(transparentAct, SIGNAL(triggered()), signalMapper_, SLOT(map()));
+        signalMapper_->setMapping(transparentAct, i);
+    }
+    connect(signalMapper_, SIGNAL(mapped(int)), SLOT(onTransparentActSelected(int)));
+
+    QAction *exitAct = new QAction(tr("&Exit"), this);
+    connect(exitAct, SIGNAL(triggered()), SLOT(onExitAct()));
+
+    QMenu *trayIconMenu_ = new QMenu(this);
+    trayIconMenu_->addMenu(optionsMenu);
+    trayIconMenu_->addMenu(transparentMenu);
+    trayIconMenu_->addSeparator();
+    trayIconMenu_->addAction(exitAct);
+
+    return trayIconMenu_;
 }

@@ -1,24 +1,21 @@
-PROJECT_DIR = $${PWD}/../
-BUILD_ESSENTIAL_DIR = $${PROJECT_DIR}/BuildEssential
-include($${BUILD_ESSENTIAL_DIR}/environment.pri)
-include($${BUILD_ESSENTIAL_DIR}/deploy.pri)
+include($$PWD/../environment.pri)
 
 QT += core gui
 
-TARGET = Screenmate
+TARGET = screenmate
 TEMPLATE = app
+
+HEADERS += \
+    screenmatewidget.h
 
 SOURCES += \
     main.cpp \
     screenmatewidget.cpp
 
-HEADERS += \
-    screenmatewidget.h
-
 RESOURCES += \
     resource.qrc
 
 OTHER_FILES += \
-    Screenmate.conf
+    screenmate.conf
 
-copyFiles($${PWD}, $${DESTDIR}, Screenmate.conf)
+#copyFiles($${PWD}, $${DESTDIR}, Screenmate.conf)
